@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUNA PRD Overview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Pretendard', -apple-system, sans-serif; background: #F8F6F3; color: #2D2D2D; padding: 40px 20px; }
+  .container { max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 28px; color: #2C3E6B; margin-bottom: 8px; }
+  .subtitle { color: #888; font-size: 14px; margin-bottom: 40px; }
+  .section { background: #fff; border-radius: 12px; padding: 28px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .section-num { font-size: 12px; color: #B8A9C9; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .section h2 { font-size: 20px; color: #2C3E6B; margin-bottom: 16px; }
+  .grid { display: grid; gap: 12px; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card { background: #FAFAF8; border: 1px solid #EEECEA; border-radius: 8px; padding: 16px; }
+  .card-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .card-desc { font-size: 13px; color: #666; line-height: 1.5; }
+  .tag { display: inline-block; background: #2C3E6B; color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-right: 4px; margin-bottom: 4px; }
+  .tag.purple { background: #B8A9C9; color: #fff; }
+  .tag.gold { background: #C9A87C; color: #fff; }
+  .tag.green { background: #4CAF50; color: #fff; }
+  .tag.gray { background: #999; color: #fff; }
+  .funnel { display: flex; align-items: center; gap: 0; margin: 16px 0; flex-wrap: wrap; }
+  .funnel-step { background: #2C3E6B; color: #fff; padding: 10px 20px; font-size: 13px; font-weight: 600; position: relative; }
+  .funnel-step:first-child { border-radius: 6px 0 0 6px; }
+  .funnel-step:last-child { border-radius: 0 6px 6px 0; }
+  .funnel-arrow { color: #B8A9C9; font-size: 20px; padding: 0 4px; }
+  .funnel-step .rate { display: block; font-size: 11px; font-weight: 400; opacity: 0.8; margin-top: 2px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 10px 12px; background: #2C3E6B; color: #fff; font-weight: 600; }
+  td { padding: 10px 12px; border-bottom: 1px solid #EEECEA; }
+  tr:hover td { background: #F8F6F3; }
+  .schema { font-family: 'Courier New', monospace; font-size: 12px; background: #2D2D2D; color: #E0E0E0; padding: 20px; border-radius: 8px; line-height: 1.6; overflow-x: auto; white-space: pre; }
+  .schema .tbl { color: #B8A9C9; font-weight: 700; }
+  .schema .rel { color: #C9A87C; }
+  .schema .col { color: #81C784; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 12px; }
+  .kpi-card { text-align: center; background: #FAFAF8; border: 1px solid #EEECEA; border-radius: 8px; padding: 16px 8px; }
+  .kpi-value { font-size: 22px; font-weight: 800; color: #2C3E6B; }
+  .kpi-label { font-size: 11px; color: #888; margin-top: 4px; }
+  .kpi-target { font-size: 11px; color: #C9A87C; margin-top: 2px; }
+  .map-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; padding: 8px 0; border-bottom: 1px solid #F0F0F0; font-size: 12px; }
+  .map-row:first-child { font-weight: 700; color: #2C3E6B; border-bottom: 2px solid #2C3E6B; }
+  .map-row .col1 { color: #2C3E6B; font-weight: 600; }
+  .page-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .page-card { background: #FAFAF8; border: 1px solid #EEECEA; border-radius: 8px; padding: 16px; text-align: center; }
+  .page-card .icon { font-size: 28px; margin-bottom: 8px; }
+  .page-card .name { font-weight: 700; font-size: 14px; }
+  .page-card .path { font-size: 12px; color: #888; font-family: monospace; }
+  .rfm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 12px 0; }
+  .rfm-card { text-align: center; border-radius: 8px; padding: 14px; }
+  .rfm-card.r { background: #E3F2FD; border: 1px solid #BBDEFB; }
+  .rfm-card.f { background: #F3E5F5; border: 1px solid #CE93D8; }
+  .rfm-card.m { background: #FFF3E0; border: 1px solid #FFB74D; }
+  .rfm-card .letter { font-size: 24px; font-weight: 800; }
+  .rfm-card .label { font-size: 12px; color: #666; margin-top: 4px; }
+  .session-box { background: #F0F4FF; border: 1px solid #C5CAE9; border-radius: 8px; padding: 16px; margin: 12px 0; }
+  .session-box .rule { font-size: 13px; margin-bottom: 6px; }
+  .session-box .rule strong { color: #2C3E6B; }
+  @media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .page-list { grid-template-columns: repeat(2, 1fr); }
+    .funnel { flex-direction: column; align-items: stretch; }
+    .funnel-step { border-radius: 6px !important; margin-bottom: 4px; }
+    .funnel-arrow { transform: rotate(90deg); text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>LUNA PRD Overview</h1>
+<p class="subtitle">비건 화장품 D2C 쇼핑몰 — 포트폴리오 MVP | 2026-03-20</p>
+
+<!-- 1. IA -->
+<div class="section">
+  <div class="section-num">Section 1</div>
+  <h2>정보 구조 (IA)</h2>
+  <div class="page-list">
+    <div class="page-card"><div class="icon">🏠</div><div class="name">홈</div><div class="path">/</div></div>
+    <div class="page-card"><div class="icon">🛍️</div><div class="name">제품 목록</div><div class="path">/products</div></div>
+    <div class="page-card"><div class="icon">🔍</div><div class="name">제품 상세</div><div class="path">/products/[id]</div></div>
+    <div class="page-card"><div class="icon">🛒</div><div class="name">장바구니</div><div class="path">/cart</div></div>
+    <div class="page-card"><div class="icon">💳</div><div class="name">결제</div><div class="path">/checkout</div></div>
+    <div class="page-card"><div class="icon">✅</div><div class="name">주문 완료</div><div class="path">/order/complete</div></div>
+    <div class="page-card"><div class="icon">👤</div><div class="name">마이페이지</div><div class="path">/mypage</div></div>
+    <div class="page-card"><div class="icon">🔑</div><div class="name">인증</div><div class="path">/auth</div></div>
+  </div>
+</div>
+
+<!-- 2. 유저 플로우 -->
+<div class="section">
+  <div class="section-num">Section 2</div>
+  <h2>핵심 매출 퍼널</h2>
+  <div class="funnel">
+    <div class="funnel-step">Visit<span class="rate">100%</span></div>
+    <div class="funnel-arrow">→</div>
+    <div class="funnel-step">Product View<span class="rate">40~50%</span></div>
+    <div class="funnel-arrow">→</div>
+    <div class="funnel-step">Add to Cart<span class="rate">15~25%</span></div>
+    <div class="funnel-arrow">→</div>
+    <div class="funnel-step">Checkout<span class="rate">50~65%</span></div>
+    <div class="funnel-arrow">→</div>
+    <div class="funnel-step" style="background:#C9A87C">Purchase 💰<span class="rate">70~85%</span></div>
+  </div>
+  <p style="font-size:13px;color:#888;margin-top:8px;">전체 전환율 (Visit → Purchase): <strong style="color:#2C3E6B">2~5%</strong></p>
+
+  <div class="grid grid-2" style="margin-top:20px;">
+    <div class="card">
+      <div class="card-title">가입 퍼널</div>
+      <div class="card-desc">Visit → Signup Start → Signup Complete → First Purchase<br>목표: 가입 후 7일 내 첫구매 15~25%</div>
+    </div>
+    <div class="card">
+      <div class="card-title">인게이지먼트 퍼널</div>
+      <div class="card-desc">First Purchase → Return Visit → Second Purchase → Review<br>매출은 아니지만 리텐션 지표</div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. DB Schema -->
+<div class="section">
+  <div class="section-num">Section 3</div>
+  <h2>DB 스키마 (9개 테이블)</h2>
+  <div class="schema"><span class="tbl">users</span> ──────┬──── <span class="tbl">orders</span> ──── <span class="tbl">order_items</span>
+  <span class="col">id, email, name</span>   │       <span class="col">id, user_id, status</span>   <span class="col">order_id, product_id</span>
+  <span class="col">gender, birth_date</span> │       <span class="col">total_amount, utm_*</span>  <span class="col">quantity, unit_price</span>
+  <span class="col">utm_source/medium</span>  │
+                    │
+               <span class="tbl">cart_items</span>           <span class="tbl">products</span> ──── <span class="tbl">categories</span>
+               <span class="col">user_id, product_id</span>  <span class="col">id, name, price</span>    <span class="col">id, name, slug</span>
+               <span class="col">quantity, added_at</span>   <span class="col">category_id</span>
+                                     <span class="col">ingredients[]</span>
+<span class="tbl">reviews</span>                              <span class="col">stock_quantity</span>
+<span class="col">user_id, product_id</span>
+<span class="col">rating, content</span>          <span class="tbl">inventory</span>            <span class="tbl">sessions</span>
+                          <span class="col">product_id</span>           <span class="col">session_id, user_id</span>
+                          <span class="col">change_type</span>          <span class="col">event_name, event_params</span>
+                          <span class="col">quantity_change</span>      <span class="col">utm_*, device_type</span></div>
+</div>
+
+<!-- 4. 분석 기준 -->
+<div class="section">
+  <div class="section-num">Section 4</div>
+  <h2>분석 기준 정의</h2>
+
+  <div class="session-box">
+    <div class="rule"><strong>세션 타임아웃:</strong> 30분 비활동 시 종료 (GA4 표준)</div>
+    <div class="rule"><strong>자정 처리:</strong> 00:00 넘기면 새 세션</div>
+    <div class="rule"><strong>바운스:</strong> 1 페이지뷰 + 10초 미만 체류</div>
+    <div class="rule"><strong>매출 귀속:</strong> 라스트 터치 (결제 세션의 UTM)</div>
+    <div class="rule"><strong>귀속 윈도우:</strong> 30일</div>
+    <div class="rule"><strong>코호트:</strong> 가입월 기준, 구매를 리텐션 행동으로</div>
+  </div>
+
+  <h3 style="font-size:16px;margin:20px 0 12px;color:#2C3E6B;">RFM 세그먼테이션</h3>
+  <div class="rfm-grid">
+    <div class="rfm-card r"><div class="letter">R</div><div class="label">Recency<br>마지막 구매 경과일<br>5: 0~14일 → 1: 91일+</div></div>
+    <div class="rfm-card f"><div class="letter">F</div><div class="label">Frequency<br>12개월 구매 횟수<br>5: 10회+ → 1: 1회</div></div>
+    <div class="rfm-card m"><div class="letter">M</div><div class="label">Monetary<br>12개월 구매 금액<br>5: 50만+ → 1: 5만 미만</div></div>
+  </div>
+  <div class="grid grid-3">
+    <div class="card"><div class="card-title">VIP (R5 F5 M5)</div><div class="card-desc">최근+자주+많이 → 전용 혜택</div></div>
+    <div class="card"><div class="card-title">신규 유망 (R5 F1 M1)</div><div class="card-desc">최근 가입 → 2차 구매 유도</div></div>
+    <div class="card"><div class="card-title">이탈 위험 (R1 F4 M4)</div><div class="card-desc">과거 충성 → 재활성화 캠페인</div></div>
+  </div>
+</div>
+
+<!-- 5. 이벤트 -->
+<div class="section">
+  <div class="section-num">Section 5</div>
+  <h2>분석 이벤트 (16개)</h2>
+  <table>
+    <tr><th>이벤트</th><th>카테고리</th><th>트리거</th></tr>
+    <tr><td>session_start</td><td><span class="tag gray">세션</span></td><td>첫 페이지 로드</td></tr>
+    <tr><td>page_view</td><td><span class="tag gray">세션</span></td><td>모든 페이지 진입</td></tr>
+    <tr><td>product_list_view</td><td><span class="tag purple">탐색</span></td><td>제품 목록 조회</td></tr>
+    <tr><td>product_list_filter</td><td><span class="tag purple">탐색</span></td><td>필터/정렬 사용</td></tr>
+    <tr><td>product_view</td><td><span class="tag purple">탐색</span></td><td>제품 상세 진입</td></tr>
+    <tr><td>ingredient_view</td><td><span class="tag purple">탐색</span></td><td>성분 정보 클릭</td></tr>
+    <tr><td>add_to_cart</td><td><span class="tag">전환</span></td><td>장바구니 추가</td></tr>
+    <tr><td>remove_from_cart</td><td><span class="tag">전환</span></td><td>장바구니 삭제</td></tr>
+    <tr><td>cart_view</td><td><span class="tag">전환</span></td><td>장바구니 페이지</td></tr>
+    <tr><td>checkout_start</td><td><span class="tag">전환</span></td><td>결제 시작</td></tr>
+    <tr><td>purchase</td><td><span class="tag gold">매출</span></td><td>결제 완료</td></tr>
+    <tr><td>signup_start</td><td><span class="tag green">인증</span></td><td>가입 폼 진입</td></tr>
+    <tr><td>signup_complete</td><td><span class="tag green">인증</span></td><td>가입 완료</td></tr>
+    <tr><td>login</td><td><span class="tag green">인증</span></td><td>로그인 완료</td></tr>
+    <tr><td>review_write</td><td><span class="tag purple">인게이지먼트</span></td><td>리뷰 작성</td></tr>
+    <tr><td>coupon_apply</td><td><span class="tag">전환</span></td><td>쿠폰 적용</td></tr>
+  </table>
+</div>
+
+<!-- 6. KPI -->
+<div class="section">
+  <div class="section-num">Section 6</div>
+  <h2>핵심 KPI</h2>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-value">GMV</div><div class="kpi-label">총 거래액</div><div class="kpi-target">월 1,000만</div></div>
+    <div class="kpi-card"><div class="kpi-value">2~3%</div><div class="kpi-label">전환율 (CVR)</div><div class="kpi-target">Visit→Purchase</div></div>
+    <div class="kpi-card"><div class="kpi-value">₩45K</div><div class="kpi-label">AOV</div><div class="kpi-target">평균 주문 금액</div></div>
+    <div class="kpi-card"><div class="kpi-value">25%</div><div class="kpi-label">재구매율</div><div class="kpi-target">2회+ 구매 비율</div></div>
+    <div class="kpi-card"><div class="kpi-value">>3.0</div><div class="kpi-label">LTV/CAC</div><div class="kpi-target">건전성 기준</div></div>
+  </div>
+  <div class="grid grid-2" style="margin-top:16px;">
+    <div class="card">
+      <div class="card-title">성장 지표</div>
+      <div class="card-desc">CAC &lt; 2만원 · LTV &gt; 5만원 · MoM 15~20% · M1 Retention &gt; 30%</div>
+    </div>
+    <div class="card">
+      <div class="card-title">운영 지표</div>
+      <div class="card-desc">장바구니 이탈 &lt; 60% · 세션 &gt; 3분 · 바운스 &lt; 40% · 리뷰율 &gt; 10%</div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. 데이터-분석 연결 맵 -->
+<div class="section">
+  <div class="section-num">Section 7</div>
+  <h2>데이터 → 분석 연결 맵</h2>
+  <div class="map-row"><div>페이지</div><div>이벤트</div><div>DB 테이블</div><div>분석 항목</div></div>
+  <div class="map-row"><div class="col1">홈</div><div>session_start, page_view</div><div>sessions</div><div>트래픽, 바운스율</div></div>
+  <div class="map-row"><div class="col1">제품 목록</div><div>product_list_view/filter</div><div>sessions</div><div>카테고리 관심도</div></div>
+  <div class="map-row"><div class="col1">제품 상세</div><div>product_view, add_to_cart</div><div>sessions, cart_items</div><div>퍼널 (조회→장바구니)</div></div>
+  <div class="map-row"><div class="col1">장바구니</div><div>cart_view, remove, coupon</div><div>cart_items</div><div>장바구니 이탈, 쿠폰 효과</div></div>
+  <div class="map-row"><div class="col1">결제</div><div>checkout_start, purchase</div><div>orders, order_items, inventory</div><div>매출(GMV), AOV, 재고</div></div>
+  <div class="map-row"><div class="col1">마이페이지</div><div>review_write</div><div>reviews, orders</div><div>리뷰 분석, 재구매</div></div>
+  <div class="map-row"><div class="col1">인증</div><div>signup, login</div><div>users, sessions</div><div>가입 퍼널, 채널 귀속</div></div>
+  <div style="margin-top:20px;">
+    <div class="card-title" style="margin-bottom:12px;">종합 분석 항목</div>
+    <span class="tag">퍼널 분석</span>
+    <span class="tag">RFM 세그먼테이션</span>
+    <span class="tag purple">코호트 리텐션</span>
+    <span class="tag gold">매출 분석</span>
+    <span class="tag green">재고 분석</span>
+    <span class="tag">채널 귀속</span>
+    <span class="tag purple">장바구니 이탈</span>
+  </div>
+</div>
+
+<p style="text-align:center;color:#999;font-size:12px;margin-top:40px;">LUNA Shop PRD Overview · Generated 2026-03-20</p>
+
+</div>
+</body>
+</html>
