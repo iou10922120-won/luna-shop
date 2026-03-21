@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,11 +8,22 @@ import { Separator } from "@/components/ui/separator";
 import { useCartStore } from "@/lib/store";
 import { formatPrice } from "@/lib/format";
 import { CheckCircle } from "lucide-react";
+import { track, AnalyticsEvent } from '@/lib/analytics';
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCartStore();
   const router = useRouter();
   const [completed, setCompleted] = useState(false);
+
+  useEffect(() => {
+    if (items.length > 0) {
+      track(AnalyticsEvent.CHECKOUT_START, {
+        cart_total: totalPrice(),
+        item_count: items.length,
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (items.length === 0 && !completed) {
     router.push("/cart");
@@ -24,7 +35,25 @@ export default function CheckoutPage() {
 
   const handleOrder = (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock order — just clear cart and show success
+
+    const orderNumber = `LUNA-${Date.now().toString().slice(-8)}`;
+
+    track(AnalyticsEvent.PURCHASE, {
+      order_id: orderNumber,
+      order_number: orderNumber,
+      total_amount: total,
+      discount_amount: 0,
+      shipping_fee: shipping,
+      item_count: items.length,
+      items: items.map((item) => ({
+        product_id: item.product.id,
+        category: item.product.category?.name ?? '',
+        quantity: item.quantity,
+        price: item.product.sale_price ?? item.product.price,
+      })),
+      payment_method: 'card',
+    });
+
     clearCart();
     setCompleted(true);
   };
