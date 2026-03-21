@@ -5,6 +5,7 @@ import { ShoppingBag, Minus, Plus, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store";
 import type { Product } from "@/lib/types";
+import { track, AnalyticsEvent } from '@/lib/analytics';
 
 export function AddToCartButton({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);
@@ -13,6 +14,17 @@ export function AddToCartButton({ product }: { product: Product }) {
 
   const handleAdd = () => {
     addItem(product, quantity);
+    // Analytics
+    const store = useCartStore.getState();
+    track(AnalyticsEvent.ADD_TO_CART, {
+      product_id: product.id,
+      product_name: product.name,
+      category: product.category?.name ?? '',
+      price: product.sale_price ?? product.price,
+      quantity,
+      cart_total: store.totalPrice(),
+      cart_item_count: store.totalItems(),
+    });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };

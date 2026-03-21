@@ -1,15 +1,27 @@
 "use client";
 
+import { useEffect } from 'react';
 import Link from "next/link";
 import { Trash2, Minus, Plus, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCartStore } from "@/lib/store";
 import { formatPrice } from "@/lib/format";
+import { track, AnalyticsEvent } from '@/lib/analytics';
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } =
     useCartStore();
+
+  useEffect(() => {
+    if (items.length > 0) {
+      track(AnalyticsEvent.CART_VIEW, {
+        cart_total: totalPrice(),
+        item_count: items.length,
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (items.length === 0) {
     return (
@@ -84,7 +96,13 @@ export default function CartPage() {
 
               <div className="flex flex-col items-end justify-between">
                 <button
-                  onClick={() => removeItem(item.product.id)}
+                  onClick={() => {
+                    track(AnalyticsEvent.REMOVE_FROM_CART, {
+                      product_id: item.product.id,
+                      product_name: item.product.name,
+                    });
+                    removeItem(item.product.id);
+                  }}
                   className="p-1 text-muted-foreground hover:text-destructive"
                 >
                   <Trash2 className="w-4 h-4" />

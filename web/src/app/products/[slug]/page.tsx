@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import type { Product, Review } from "@/lib/types";
 import { AddToCartButton } from "./add-to-cart-button";
+import { ProductTracker } from "./product-tracker";
 import { formatPrice, discountRate } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -46,6 +47,14 @@ export default async function ProductDetailPage({ params }: Props) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      <ProductTracker
+        productId={product.id}
+        productName={product.name}
+        category={product.category?.name ?? ''}
+        price={product.price}
+        salePrice={product.sale_price}
+        hasIngredients={!!product.ingredient_details?.length}
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         {/* Image */}
         <div className="aspect-square bg-gradient-to-br from-[#f0ece6] to-[#e8e0f0] rounded-2xl flex items-center justify-center">

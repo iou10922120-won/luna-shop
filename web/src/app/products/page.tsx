@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/product-card";
 import type { Product, Category } from "@/lib/types";
+import { ProductListTracker } from "./product-list-tracker";
 
 interface Props {
   searchParams: Promise<{ category?: string }>;
@@ -46,6 +47,7 @@ export default async function ProductsPage({ searchParams }: Props) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      <ProductListTracker category={categorySlug} />
       {/* Title */}
       <h1 className="text-3xl font-bold mb-8">
         {categorySlug

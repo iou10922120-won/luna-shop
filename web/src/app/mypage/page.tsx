@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { track, AnalyticsEvent } from '@/lib/analytics';
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { User, Package, LogIn } from "lucide-react";
@@ -24,6 +25,7 @@ export default function MyPage() {
           onSubmit={(e) => {
             e.preventDefault();
             setIsLoggedIn(true);
+            track(AnalyticsEvent.LOGIN, { method: 'email' });
           }}
           className="space-y-4"
         >
