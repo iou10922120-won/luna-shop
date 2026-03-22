@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import type { Product, Review } from "@/lib/types";
 import { AddToCartButton } from "./add-to-cart-button";
 import { ProductTracker } from "./product-tracker";
 import { formatPrice, discountRate } from "@/lib/format";
+import { getProductImage } from "@/lib/images";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
@@ -57,8 +59,15 @@ export default async function ProductDetailPage({ params }: Props) {
       />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         {/* Image */}
-        <div className="aspect-square bg-gradient-to-br from-[#f0ece6] to-[#e8e0f0] rounded-2xl flex items-center justify-center">
-          <span className="text-8xl opacity-20">🌙</span>
+        <div className="aspect-square bg-gradient-to-br from-[#f0ece6] to-[#e8e0f0] rounded-2xl overflow-hidden relative">
+          <Image
+            src={getProductImage(product.slug)}
+            alt={product.name}
+            fill
+            className="object-cover"
+            priority
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
         </div>
 
         {/* Info */}

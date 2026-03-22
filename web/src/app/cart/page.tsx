@@ -2,11 +2,13 @@
 
 import { useEffect } from 'react';
 import Link from "next/link";
+import Image from "next/image";
 import { Trash2, Minus, Plus, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCartStore } from "@/lib/store";
 import { formatPrice } from "@/lib/format";
+import { getProductImage } from "@/lib/images";
 import { track, AnalyticsEvent } from '@/lib/analytics';
 
 export default function CartPage() {
@@ -56,9 +58,15 @@ export default function CartPage() {
               key={item.product.id}
               className="flex gap-4 bg-white border border-border rounded-lg p-4"
             >
-              {/* Thumbnail placeholder */}
-              <div className="w-20 h-20 bg-gradient-to-br from-[#f0ece6] to-[#e8e0f0] rounded-lg flex items-center justify-center shrink-0">
-                <span className="text-2xl opacity-20">🌙</span>
+              {/* Thumbnail */}
+              <div className="w-20 h-20 bg-gradient-to-br from-[#f0ece6] to-[#e8e0f0] rounded-lg overflow-hidden relative shrink-0">
+                <Image
+                  src={getProductImage(item.product.slug)}
+                  alt={item.product.name}
+                  fill
+                  className="object-cover"
+                  sizes="80px"
+                />
               </div>
 
               <div className="flex-1 min-w-0">

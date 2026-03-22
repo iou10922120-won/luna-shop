@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice, discountRate } from "@/lib/format";
+import { getProductImage } from "@/lib/images";
 import type { Product } from "@/lib/types";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -13,18 +15,24 @@ export function ProductCard({ product }: { product: Product }) {
       href={`/products/${product.slug}`}
       className="group block bg-white rounded-xl overflow-hidden border border-border hover:shadow-lg transition-shadow"
     >
-      {/* Image placeholder */}
-      <div className="aspect-square bg-gradient-to-br from-[#f0ece6] to-[#e8e0f0] flex items-center justify-center relative">
-        <span className="text-4xl opacity-30">🌙</span>
+      {/* Product Image */}
+      <div className="aspect-square bg-gradient-to-br from-[#f0ece6] to-[#e8e0f0] relative overflow-hidden">
+        <Image
+          src={getProductImage(product.slug)}
+          alt={product.name}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-300"
+          sizes="(max-width: 768px) 50vw, 25vw"
+        />
         {hasDiscount && (
-          <Badge className="absolute top-3 left-3 bg-[#2C3E6B] text-white text-xs">
+          <Badge className="absolute top-3 left-3 bg-[#2C3E6B] text-white text-xs z-10">
             {discountRate(product.price, product.sale_price!)}
           </Badge>
         )}
         {product.is_vegan_certified && (
           <Badge
             variant="outline"
-            className="absolute top-3 right-3 text-[10px] border-green-500 text-green-700 bg-white/80"
+            className="absolute top-3 right-3 text-[10px] border-green-500 text-green-700 bg-white/80 z-10"
           >
             VEGAN
           </Badge>
